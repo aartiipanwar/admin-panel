@@ -1,9 +1,10 @@
 "use client";
-
+//Dashboard Page
+// Tech: Next.js 14 App Router + Material UI + Zustand Auth
 import Link from "next/link";
-import { useAuthStore } from "@/store/authStore";
-import { useRouter } from "next/navigation";
-import ProtectedRoute from "@/components/ProtectedRoute";
+import { useAuthStore } from "@/store/authStore";   // Global auth state management
+import { useRouter } from "next/navigation";        // Client-side navigation
+import ProtectedRoute from "@/components/ProtectedRoute";    // Auth protection wrapper
 import { useState, useEffect } from "react";
 import {
   Card,
@@ -13,7 +14,7 @@ import {
   Chip,
   Avatar,
   CircularProgress
-} from "@mui/material";
+} from "@mui/material";      //import icons
 import {
   ShoppingCart,
   People,
@@ -23,21 +24,28 @@ import {
 } from "@mui/icons-material";
 
 export default function Dashboard() {
+  // Zustand store state
   const { user } = useAuthStore();
   const router = useRouter();
+
+  // Local state for real-time stats
   const [stats, setStats] = useState({ totalProducts: 0, totalUsers: 0, totalOrders: 0 });
   const [loading, setLoading] = useState(true);
 
+  //Fetch live stats from dummyjson API
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       try {
+        // Fetch products, users, orders simultaneously
         const [products, users, orders] = await Promise.all([
           fetch("https://dummyjson.com/products"),
           fetch("https://dummyjson.com/users"),
           fetch("https://dummyjson.com/carts")
         ]);
         const [pData, uData, oData] = await Promise.all([products.json(), users.json(), orders.json()]);
+       
+        // Update stats state
         setStats({
           totalProducts: pData.total || 0,
           totalUsers: uData.total || 0,
