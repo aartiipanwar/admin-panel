@@ -12,7 +12,7 @@ export const useUserStore = create((set)=>({
     const data = await res.json();
     set({users:data.users,total:data.total});
   },
-  fetchUserById: async(id)=>{
+  fetchUserById: async(id:number)=>{
     const res = await fetch(`https://dummyjson.com/users/${id}`);
     return await res.json();
   }
